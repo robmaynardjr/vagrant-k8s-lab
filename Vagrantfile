@@ -109,37 +109,37 @@ Vagrant.configure(2) do |config|
     SHELL
   end
 
-   config.vm.define "k8sworker2" do |k8sworker|
-   k8sworker.ssh.forward_agent = true
-   k8sworker.vm.provision "shell", inline: <<-SHELL
-      set -e
-      set -x
-      sed 's/127\.0\.0\.1.*k8s.*/192\.168\.8\.12 k8sworker/' -i /etc/hosts
-      #echo "192.168.8.10 k8smaster" >> /etc/hosts
-      #echo "192.168.8.11 k8sworker" >> /etc/hosts
-      curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-#      echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" >> ~/kubernetes.list
-      echo "deb https://packages.cloud.google.com/apt/ kubernetes-xenial-unstable main" >> ~/kubernetes.list
-      mv ~/kubernetes.list /etc/apt/sources.list.d
-      apt-get update
-      apt-get upgrade -y
-       apt-get install -y docker.io
-      apt-get install -y kubelet kubeadm kubectl kubernetes-cni
-      apt-get install -y nfs-common
-      echo "export KUBERNETES_SERVICE_HOST=192.168.8.10" > /etc/profile.d/kubernetes.sh
-      echo "export KUBERNETES_SERVICE_PORT=6443" >> /etc/profile.d/kubernetes.sh
-      kubeadm join --skip-preflight-checks --token=54c315.78a320e33baaf27d 192.168.8.10:6443 
-      sleep 120
-      export KUBECONFIG=/vagrant/kubeconfig/admin.conf
-      kubectl create -f /vagrant/monitoring/kube-heapster.yml
-      kubectl create -f /vagrant/dashboard/kube-dashboard.yml
-      wget --no-verbose -O /tmp/helm-v2.5.0-linux-amd64.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.5.0-linux-amd64.tar.gz
-      tar -zxvf /tmp/helm-v2.5.0-linux-amd64.tar.gz --strip-components=1 -C /tmp
-      kubectl create serviceaccount -n kube-system tiller
-      kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-      /tmp/helm init --service-account=tiller --tiller-namespace=kube-system
-      rm -rf /tmp/helm-v2.5.0-linux-amd64.tar.gz
-      echo "export KUBECONFIG=/vagrant/kubeconfig/admin.conf" >> /etc/profile.d/kubernetes.sh
-    SHELL
-  end
+#    config.vm.define "k8sworker2" do |k8sworker|
+#    k8sworker.ssh.forward_agent = true
+#    k8sworker.vm.provision "shell", inline: <<-SHELL
+#       set -e
+#       set -x
+#       sed 's/127\.0\.0\.1.*k8s.*/192\.168\.8\.12 k8sworker/' -i /etc/hosts
+#       #echo "192.168.8.10 k8smaster" >> /etc/hosts
+#       #echo "192.168.8.11 k8sworker" >> /etc/hosts
+#       curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+# #      echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" >> ~/kubernetes.list
+#       echo "deb https://packages.cloud.google.com/apt/ kubernetes-xenial-unstable main" >> ~/kubernetes.list
+#       mv ~/kubernetes.list /etc/apt/sources.list.d
+#       apt-get update
+#       apt-get upgrade -y
+#        apt-get install -y docker.io
+#       apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+#       apt-get install -y nfs-common
+#       echo "export KUBERNETES_SERVICE_HOST=192.168.8.10" > /etc/profile.d/kubernetes.sh
+#       echo "export KUBERNETES_SERVICE_PORT=6443" >> /etc/profile.d/kubernetes.sh
+#       kubeadm join --skip-preflight-checks --token=54c315.78a320e33baaf27d 192.168.8.10:6443 
+#       sleep 120
+#       export KUBECONFIG=/vagrant/kubeconfig/admin.conf
+#       kubectl create -f /vagrant/monitoring/kube-heapster.yml
+#       kubectl create -f /vagrant/dashboard/kube-dashboard.yml
+#       wget --no-verbose -O /tmp/helm-v2.5.0-linux-amd64.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v2.5.0-linux-amd64.tar.gz
+#       tar -zxvf /tmp/helm-v2.5.0-linux-amd64.tar.gz --strip-components=1 -C /tmp
+#       kubectl create serviceaccount -n kube-system tiller
+#       kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+#       /tmp/helm init --service-account=tiller --tiller-namespace=kube-system
+#       rm -rf /tmp/helm-v2.5.0-linux-amd64.tar.gz
+#       echo "export KUBECONFIG=/vagrant/kubeconfig/admin.conf" >> /etc/profile.d/kubernetes.sh
+#     SHELL
+#   end
 end
