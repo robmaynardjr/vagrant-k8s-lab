@@ -15,15 +15,15 @@ boxes = [
     {
         :name => "k8sworker",
         :eth1 => "192.168.8.11",
-        :mem => "1048",
+        :mem => "4096",
         :cpu => "2"
-    },
-    {
-        :name => "k8sworker2",
-        :eth1 => "192.168.8.12",
-        :mem => "4048",
-        :cpu => "3"
-    },
+    }
+    # {
+    #     :name => "k8sworker2",
+    #     :eth1 => "192.168.8.12",
+    #     :mem => "4048",
+    #     :cpu => "3"
+    # },
 ]
 
 Vagrant.configure(2) do |config|
